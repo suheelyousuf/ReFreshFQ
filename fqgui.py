@@ -35,6 +35,7 @@ from merge_subtract import merge_fastq
 from merge_subtract import subtract_fastq
 from trimquality import trim_quality
 from graphgeneration import plot_all_graphs
+from validatefastq import isFastq
 
 
 #global filepath1
@@ -45,6 +46,7 @@ def vp_start_gui():
     #print("rest in peace")
     global val, w, root
     root = tk.Tk()
+    global filepath1
     fqgui_support.set_Tk_var()
     top = Toplevel1 (root)
     fqgui_support.init(root, top)
@@ -67,6 +69,7 @@ def destroy_Toplevel1():
     w = None
 
 class Toplevel1:
+    #global filepath1
         #def loadfile(self):
                 #filepath=choosefiledialog.choosefile()
     def loadfile(self):
@@ -76,6 +79,16 @@ class Toplevel1:
             self.lb_filename.configure(text=os.path.basename(filepath1))
     def processfile(self):
             #print(filepath1)
+            if len(filepath1)<1:
+                    messagebox.showinfo("Error", "Please choose a Fastq file")
+                    return
+
+            if isFastq(filepath1)==False:
+                    messagebox.showinfo("Error", "Not a Fastq file")
+                    return
+            for r in range(7):
+                    self.notebook.tab(r, state="normal")
+            
             self.txt_stat.insert(tk.END,"\n"+" File Name = "+os.path.basename(filepath1)+"\n")
             self.txt_stat.insert(tk.END,"\n"+" File Path = "+filepath1+"\n")
             stat=basicstatistics.statistics(filepath1)
@@ -126,9 +139,9 @@ class Toplevel1:
             file_save(str_qt)
             return
     def plotgraphs(self):
-            print("hello")
-            print(self.check1.get(),self.check2.get())
-            print(filepath1)
+            #print("hello")
+            #print(self.check1.get(),self.check2.get())
+            #print(filepath1)
             plot_all_graphs(filepath1,self.check1.get(),self.check2.get())
             return
 
@@ -269,31 +282,32 @@ class Toplevel1:
         self.notebook.place(relx=0.055, rely=0.4, relheight=0.579
                 , relwidth=0.918)
         self.notebook.configure(takefocus="")
+        #self.notebook.configure(state="DISABLED")
         self.notebook_t0 = tk.Frame(self.notebook)
         self.notebook.add(self.notebook_t0, padding=3)
-        self.notebook.tab(0, text="Statistics / Validate", compound="left"
+        self.notebook.tab(0, text="Statistics / Validate", compound="left", state="disabled"
                 ,underline="-1", )
         self.notebook_t1 = tk.Frame(self.notebook)
         self.notebook.add(self.notebook_t1, padding=3)
-        self.notebook.tab(1, text="Search",compound="none",underline="-1",)
+        self.notebook.tab(1, text="Search",compound="none",underline="-1",state="disabled")
         self.notebook_t2 = tk.Frame(self.notebook)
         self.notebook.add(self.notebook_t2, padding=3)
-        self.notebook.tab(2, text="View",compound="none",underline="-1",)
+        self.notebook.tab(2, text="View",compound="none",underline="-1",state="disabled")
         self.notebook_t3 = tk.Frame(self.notebook)
         self.notebook.add(self.notebook_t3, padding=3)
         self.notebook.tab(3, text="Trim Primer", compound="none", underline="-1"
-                ,)
+                ,state="disabled")
         self.notebook_t4 = tk.Frame(self.notebook)
         self.notebook.add(self.notebook_t4, padding=3)
         self.notebook.tab(4, text="Compare / Merge", compound="none"
-                ,underline="-1", )
+                ,underline="-1",state="disabled" )
         self.notebook_t5 = tk.Frame(self.notebook)
         self.notebook.add(self.notebook_t5, padding=3)
-        self.notebook.tab(5, text="Q-Trim",compound="none",underline="-1",)
+        self.notebook.tab(5, text="Q-Trim",compound="none",underline="-1",state="disabled")
         self.notebook_t6 = tk.Frame(self.notebook)
         self.notebook.add(self.notebook_t6, padding=3)
         self.notebook.tab(6, text="Plot Graphs", compound="none", underline="-1"
-                ,)
+                ,state="disabled")
 
         self.txt_stat = tk.Text(self.notebook_t0)
         self.txt_stat.place(relx=0.03, rely=0.036, relheight=0.914
