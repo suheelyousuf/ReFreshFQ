@@ -46,7 +46,7 @@ def vp_start_gui():
     #print("rest in peace")
     global val, w, root
     root = tk.Tk()
-    global filepath1
+    #global filepath1
     fqgui_support.set_Tk_var()
     top = Toplevel1 (root)
     fqgui_support.init(root, top)
@@ -77,6 +77,7 @@ class Toplevel1:
             filepath1=choosefile()
             #print(filepath1)
             self.lb_filename.configure(text=os.path.basename(filepath1))
+            self.bt_process.configure(state="normal")
     def processfile(self):
             #print(filepath1)
             if len(filepath1)<1:
@@ -98,6 +99,11 @@ class Toplevel1:
             self.txt_stat.insert(tk.END,"\n"+" GC % ="+str(stat[3])+"\n")
     def searchfastq(self):
             sequence=self.txt_sequence.get("1.0")
+            print(len(sequence))
+            if len(sequence)<=1:
+                    messagebox.showinfo("Error", "Please enter a sequence")
+                    return
+
             matchreads=search(filepath1,sequence)
             file_save(matchreads)
             return
@@ -156,6 +162,10 @@ class Toplevel1:
             u=self.txt_to.get()
             refine_data=""
             if rb1 == 3:
+                if len(l)<1 or len(u)<1:
+                    messagebox.showinfo("Error", "Please enter proper range")
+                    return
+
                 l=int(l)
                 u=int(u)
                 print(l,u)
@@ -270,6 +280,7 @@ class Toplevel1:
         self.bt_process.configure(font="-family {DejaVu Sans} -size 12 -weight bold")
         self.bt_process.configure(text='''Process File''')
         self.bt_process.configure(command=self.processfile)
+        self.bt_process.configure(state="disabled")
 
         self.TSeparator2 = ttk.Separator(top)
         self.TSeparator2.place(relx=0.0, rely=0.381, relwidth=0.996)
