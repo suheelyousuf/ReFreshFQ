@@ -37,3 +37,21 @@ cd ReFreshFQ
 And to run the tool,
 
 python fqgui.py
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture1.PNG)
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture2.PNG)
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture3.PNG)
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture4.PNG)
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture5.PNG)
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture6.PNG)
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture7.PNG)
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture8.PNG)
+
+![Home Screen](https://github.com/suheelyousuf/ReFreshFQ/blob/master/screens/Capture9.PNG)
