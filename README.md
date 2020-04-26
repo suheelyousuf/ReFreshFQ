@@ -21,3 +21,16 @@ In Next Generation Sequencing (NGS) data analyses, some primary preprocessing of
 •	Explain statistics of fastq files by generating graphs. 
 
 •	Validate fastq file.
+
+## Installation
+
+ReFreshFQ requirs BioPython library installed,
+
+To install BioPython in your system, type "pip install biopython"
+
+If BioPython is already installed, building can be performed similar to the following:
+
+git clone https://github.com/suheelyousuf/ReFreshFQ.git
+cd ReFreshFQ
+And to run the tool,
+python fqgui.py
