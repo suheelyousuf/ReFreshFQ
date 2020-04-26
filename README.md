@@ -31,6 +31,9 @@ To install BioPython in your system, type "pip install biopython"
 If BioPython is already installed, building can be performed similar to the following:
 
 git clone https://github.com/suheelyousuf/ReFreshFQ.git
+
 cd ReFreshFQ
+
 And to run the tool,
+
 python fqgui.py
