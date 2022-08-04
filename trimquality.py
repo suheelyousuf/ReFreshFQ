@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+#  -*- coding: utf-8 -*-
+# By Suheel Yousuf Wani
 
 from CheckIsCompressed import isCompressed
 from Bio import SeqIO

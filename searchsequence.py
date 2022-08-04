@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+#  -*- coding: utf-8 -*-
+# By Suheel Yousuf Wani
 from Bio import SeqIO
 #from savefiledialog import file_save
 import gzip
