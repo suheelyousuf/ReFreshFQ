@@ -1,6 +1,8 @@
 # ReFreshFQ: A GUI based tool for the preprocessing of FastQ files
 
-In Next Generation Sequencing (NGS) data analyses, some primary preprocessing of sequences data is needed before these sequences go for analysis in different tools or pipelines. These manipulations or preprocessing tasks includes finding a particular sequence pattern, changing file format , statistics of data within files, merging of files, per read quality control(QC), adapter trimming, quality filtering, per-read quality cutting etc. To ease these tasks, we developed a Graphical User Interface (GUI) based software suite that will help the scientists and researchers in manipulations of FASTQ files with ease. The ReFreshFQ is a containerized tool that makes it easy-to-install and easy-to-run. 
+An essential procedure of sequence data is required in Next Generation Sequencing (NGS)  before these sequences are used for research in various tools or pipelines. 
+These operations or preprocessing activities include discovering a particular sequence pattern, altering file format, data statistics, merging files, per-read quality control (QC), adapter trimming, quality filtering, and per-read quality cutting among others.
+To make these activities more manageable, we created a software package with a graphical user interface (GUI) that would immediately assist scientists and researchers in manipulating FASTQ data. ReFreshFQ is a containerized solution that is simple to install and use.
 
 ## ReFreshFQ can do following tasks on fastq files.
 
@@ -8,7 +10,7 @@ In Next Generation Sequencing (NGS) data analyses, some primary preprocessing of
 
 •	Find FASTQ reads containing specific sequences.
 
-•	View FASTQ files with different options like show first ten reads, show last ten reads, show reads within range, show sequence data only, show header data only, show quality data only, view in fasta format.
+•	Viewing FASTQ files offer a variety of choices, including the ability to examine the first 10 reads, the last 10 reads, reads within a range, sequence data just, header data alone, quality data only, and fasta format.
 
 •	Trimming off primer sequences.
 
@@ -16,7 +18,7 @@ In Next Generation Sequencing (NGS) data analyses, some primary preprocessing of
 
 •	Subtract one fastq file from another fastq file.
 
-•	Trim reads that has low quality score.
+•	Trim reads that have a low-quality score.
 
 •	Explain statistics of fastq files by generating graphs. 
 
