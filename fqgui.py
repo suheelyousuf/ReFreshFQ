@@ -16,6 +16,7 @@ import os
 from tkinter import *
 from tkinter import messagebox
 from Bio import SeqIO
+import gzip
 
 
 try:
@@ -38,7 +39,7 @@ import basicstatistics
 from searchsequence import search
 from savefiledialog import file_save
 from filterfastq import filter_file
-from trimprimer import trimoffprimer
+from trimprimer import cut_primer
 from merge_subtract import merge_fastq
 from merge_subtract import subtract_fastq
 from trimquality import trim_quality
@@ -82,39 +83,69 @@ class Toplevel1:
                 #filepath=choosefiledialog.choosefile()
     def loadfile(self):
             global filepath1
+            
             filepath1=choosefile()
             #print(filepath1)
             self.lb_filename.configure(text=os.path.basename(filepath1))
             self.bt_process.configure(state="normal")
     def processfile(self):
             #print(filepath1)
+            global handle
             if len(filepath1)<1:
-                    messagebox.showinfo("Error", "Please choose a Fastq file")
-                    return
+                messagebox.showinfo("Error", "Please choose a Fastq file")
+                return
 
             if isFastq(filepath1)==False:
-                    messagebox.showinfo("Error", "Not a Fastq file")
-                    return
+                messagebox.showinfo("Error", "Not a Fastq file")
+                return
             for r in range(7):
-                    self.notebook.tab(r, state="normal")
+                self.notebook.tab(r, state="normal")
             
             self.txt_stat.insert(tk.END,"\n"+" File Name = "+os.path.basename(filepath1)+"\n")
             self.txt_stat.insert(tk.END,"\n"+" File Path = "+filepath1+"\n")
-            stat=basicstatistics.statistics(filepath1)
-            self.txt_stat.insert(tk.END,"\n"+" File Type = "+stat[2]+"\n")
-            self.txt_stat.insert(tk.END,"\n"+" Total Sequences= "+str(stat[0])+"\n")
-            self.txt_stat.insert(tk.END,"\n"+" Sequence Length="+str(stat[1])+"\n")
-            self.txt_stat.insert(tk.END,"\n"+" GC % ="+str(stat[3])+"\n")
-    def searchfastq(self):
-            sequence=self.txt_sequence.get("1.0")
-            print(len(sequence))
-            if len(sequence)<=1:
-                    messagebox.showinfo("Error", "Please enter a sequence")
-                    return
 
-            matchreads=search(filepath1,sequence)
-            file_save(matchreads)
+            try:
+                if filepath1.endswith(".gz"):
+                    handle=gzip.open(filepath1,"rt")
+                else:
+                      handle = open(filepath1,'rt')
+            except Exception as e:
+                  print("error")
+            stat=basicstatistics.statistics(handle)
+            handle.seek(0)
+
+            #print(type(stat))
+            for key, value in stat.items():
+                  self.txt_stat.insert(tk.END,"\n")
+                  if isinstance(value,dict):
+                        self.txt_stat.insert(tk.END,str(key)+"\n")
+                        for nested_key, nested_value in value.items():
+                              self.txt_stat.insert(tk.END,f"  {nested_key}: {nested_value}"+"\n")
+
+                  else:
+                        self.txt_stat.insert(tk.END,f"{key}: {value}"+"\n")
+
+                
+                  
+            
+            #self.txt_stat.insert(tk.END,str(stat))
+            #self.txt_stat.insert(tk.END,"\n"+" Total Sequences= "+str(stat[0])+"\n")
+            #self.txt_stat.insert(tk.END,"\n"+" Sequence Length="+str(stat[1])+"\n")
+            #self.txt_stat.insert(tk.END,"\n"+" GC % ="+str(stat[3])+"\n")
+    def searchfastq(self):
+        sequence=self.txt_sequence.get("1.0", "end-1c")
+        #print(len(sequence))
+        #print(sequence)
+        if len(sequence)<=1:
+            messagebox.showinfo("Error", "Please enter a sequence")
             return
+
+        matchreads=search(handle,sequence)
+        handle.seek(0)
+        messagebox.showinfo("Detailed of the first matched sequence "+sequence,matchreads)
+            #print(matchreads)
+            #file_save(matchreads)
+        return
 
     def selected(self):
             return self.var_system.get()
@@ -122,8 +153,8 @@ class Toplevel1:
             return self.var_system1.get()
     def trim_primer(self):
             primer=self.txt_primer.get()
-            trimed_data=trimoffprimer(filepath1,primer)
-            file_save(trimed_data)
+            cut_primer(handle,primer)
+            #file_save(trimed_data)
             
 
 
@@ -163,12 +194,16 @@ class Toplevel1:
                    
 
     def vew_filtered_file(self):
+            
             rb1=self.selected()
             rb2=self.selected1()
             print(rb1,rb2)
             l=self.txt_from.get()
             u=self.txt_to.get()
             refine_data=""
+            record_length=0
+            for record in SeqIO.parse(handle,'fastq'):
+                record_length+=1
             if rb1 == 3:
                 if len(l)<1 or len(u)<1:
                     messagebox.showinfo("Error", "Please enter proper range")
@@ -177,13 +212,19 @@ class Toplevel1:
                 l=int(l)
                 u=int(u)
                 print(l,u)
-                record_length = len(list(SeqIO.parse(filepath1, "fastq")))
+                record_length=0
+                
+                #record_length = len(list(SeqIO.parse(filepath1, "fastq")))
                 if l>=u and l<0 and u>=record_length:
                         messagebox.showinfo("Wrong Arguments", "Invalid Upper/Lower range arugumets")
                         return
                 
-            refine_data=filter_file(filepath1,rb1,rb2,l,u)
-            file_save(refine_data)
+            #new_file_object=
+            filter_file(filepath1,rb1,rb2,100,l,u)
+            handle.seek(0)
+            print("file type")
+            #print(type(new_file_object))
+            #file_save(new_file_object)
             return
 
 

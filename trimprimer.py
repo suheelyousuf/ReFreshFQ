@@ -4,19 +4,39 @@
 
 from CheckIsCompressed import isCompressed
 from Bio import SeqIO
+import shutil
+import os
+from tkinter import filedialog
+
 
 import gzip
 
-def trim_primer(read, primer):
-    r_str=""
-    if read.seq.startswith(primer):
-        r_str=r_str+str(read.id)+"\n"
-        r_str=r_str+str(read.seq[len(primer):])+"\n"
-        r_str=r_str+str(read.format("fastq").split("\n")[2])+"\n"
-        r_str=r_str+str(read.format("fastq").split("\n")[3])+"\n"
-        return r_str
-    else:
-        return str(read.format("fastq"))
+def cut_primer(handle, primer):
+    count=0
+    handle1=open("copy.fastq","w")
+    for record in SeqIO.parse(handle, "fastq"):
+        sequence = str(record.seq)
+        if sequence.startswith(primer):
+            rec=""
+            
+            trimmed_sequence = sequence[len(primer):]
+            rec=str(record.id)+trimmed_sequence+"\n"+"+"+"\n"+record.letter_annotations['phred_quality']+"\n"
+            
+            record.seq = trimmed_sequence
+            
+            SeqIO.write(rec, handle1, "fastq")
+            count += 1
+        else:
+            SeqIO.write(record,handle1,"fastq")
+    f = filedialog.asksaveasfile(mode='w', defaultextension=".fastq")
+    
+    shutil.copyfileobj(handle1,f)
+            
+                
+    os.remove("copy.fastq")
+    f.close()
+
+    '''
 
 def trimoffprimer(filename,primersequence):
     trim_str=""
@@ -35,3 +55,4 @@ def trimoffprimer(filename,primersequence):
     
 #print(trimoffprimer("t1.fastq.gz","AC"))
 
+'''

@@ -4,23 +4,30 @@
 from Bio import SeqIO
 #from savefiledialog import file_save
 import gzip
-from CheckIsCompressed import isCompressed
-def search(filename,sequence):
-    filesearch=""
-    if isCompressed(filename):
-        with gzip.open(filename, "rt") as handle:
-            for read in SeqIO.parse(handle,"fastq"):
-                if(sequence in read.seq):
-                   filesearch=str(filesearch+read.id+"\n"+read.seq+"\n")
-        return filesearch
-              
-    else:
-        with open(filename, "rt") as handle:
-            for read in SeqIO.parse(handle,"fastq"):
-                if sequence in read.seq:
-                    filesearch=str(filesearch+read.id+"\n"+read.seq+"\n")
-        return filesearch
-  
+
+def search(handle, target_sequence):
+    print(target_sequence)
+    print(type(handle))
+    print(SeqIO)
+    try:
+            
+        for record in SeqIO.parse(handle, "fastq"):
+            print("hello")
+            message="hello"
+            if target_sequence in str(record.seq):
+                message=message+"Sequence found in FASTQ record:"+"\n"
+                message=message+f"Header: {record.id}"+"\n"
+                message=message+f"Sequence: {record.seq}"+"\n"
+                message=message+f"Quality scores: {record.letter_annotations['phred_quality']}"+"\n"
+                print(message)
+                return message
+    except Exception as e:
+        print("Error")
+        return "No match"
+                
+
+        
+ 
     
 
 #a=search("t1.fastq.gz","CCGC")
